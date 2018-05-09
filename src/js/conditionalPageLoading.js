@@ -9,11 +9,7 @@ function conditionalPageLoading() {
   //remove the file extension
   currentDocument = currentDocument.toString().replace(/\.[^/.]+$/, "");
 
-  if (!(currentDocument.isEmpty)) {
+  if (currentDocument.toString() !== '') {
     $('head').append('<link rel="stylesheet" href="css/' + currentDocument + '.css">');
   }
 }
-
-String.prototype.isEmpty = function () {
-  return (this.length === 0 || !this.trim());
-};

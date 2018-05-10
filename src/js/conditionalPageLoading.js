@@ -4,12 +4,23 @@ function conditionalPageLoading() {
   // TODO: create functions for loading head information for:
   //
 
-  // TODO: turn the below code into a method, use reg ex string parsing to make it load the file's directory location into a var, and conditionally check each critical css file
-  loadRegularCSS();
+  // check for normalize.css and main.css files and load them if they exist
+  loadCSSFile('normalize');
+  loadCSSFile('main');
 
-  /*
+  //loads a .css file based on the specific page location
+  loadPageCSS();
+}
+
+//methods
+function loadCSSFile(fileName) {
+  //get the site domain and current path url
+  var siteURL = document.location.origin + document.location.pathname;
+  siteURL = siteURL.substring(0, siteURL.lastIndexOf("/"));
+
+  //ajax method that checks for the existence of a css file in the /css directory based on fileName string, loads it if it exists
   $.ajax({
-    url: 'http://localhost/javascript-conditional-page-loading/css/normalize.css',
+    url: siteURL + '/css/' + fileName + '.css',
     type: 'HEAD',
     error: function()
     {
@@ -17,53 +28,20 @@ function conditionalPageLoading() {
     },
     success: function(){
       //file exists
-      $('head').append('<link rel="stylesheet" href="css/normalize.css">');
+      $('head').append('<link rel="stylesheet" href="css/' + fileName + '.css">');
     }
   });
+}
 
-  $.ajax({
-    url: 'http://localhost/javascript-conditional-page-loading/css/main.css',
-    type: 'HEAD',
-    error: function()
-    {
-      //file does not exist
-    },
-    success: function(){
-      //file exists
-      $('head').append('<link rel="stylesheet" href="css/main.css">');
-    }
-  });
-  */
-/*
-  //universal css file appends to all pages
-  $('head').append('<link rel="stylesheet" href="css/main.css">');
-*/
+function loadPageCSS() {
   //get the current page name + extension
   var currentDocument = location.href.split("/").slice(-1);
   //remove the file extension
   currentDocument = currentDocument.toString().replace(/\.[^/.]+$/, "");
 
   if (currentDocument.toString() !== '') {
-    $('head').append('<link rel="stylesheet" href="css/' + currentDocument + '.css">');
+    loadCSSFile(currentDocument);
+
+    //$('head').append('<link rel="stylesheet" href="css/' + currentDocument + '.css">');
   }
-}
-
-
-//methods
-function loadRegularCSS() {
-  var siteURL = document.location.origin + document.location.pathname;
-
-  $.ajax({
-    url: siteURL + 'css/normalize.css',
-    type: 'HEAD',
-    error: function()
-    {
-      //file does not exist
-    },
-    success: function(){
-      //file exists
-      $('head').append('<link rel="stylesheet" href="css/normalize.css">');
-    }
-  });
-  
 }
